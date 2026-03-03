@@ -51,14 +51,3 @@ async def get_monthly_data(month:str):
     
     return analysed_data
  
-# Function fetches recently played tracks from spotify APi, cleans it and saves it to db. Runs once a day with github actions   
-# @router.get("/recent")
-# async def root():
-#     token = sp_auth.validate_token(sp_auth.cache_handler.get_cached_token())
-#     sp = Spotify(auth=token['access_token'])
-#     tracks = sp.current_user_recently_played(limit=50, after=None, before=None)
-#     cleaned_data = parse_recently_played_tracks(tracks)
-#     save_recentplays_to_db(cleaned_data)
-    
-#     return cleaned_data
-    
