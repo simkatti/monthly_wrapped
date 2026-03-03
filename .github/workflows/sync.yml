@@ -18,7 +18,7 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
       - name: Install dependencies
-        run: poetry install
+        run: poetry install --no-root
       - name: Run sync script
         env: 
           SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
