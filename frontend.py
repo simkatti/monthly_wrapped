@@ -1,9 +1,15 @@
 import streamlit as st
 import requests
 import streamlit.components.v1 as components
+import datetime
 
-st.title("10 Recently Played Songs")
+st.title("Spotify monthly wrapped")
 st.space(size="medium")
+
+current_month = datetime.datetime.now().month
+months = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+available_months = months[:current_month]
+
 
 
 if st.button("Login to Spotify"):
@@ -14,26 +20,61 @@ if st.button("Login to Spotify"):
         st.info(f"Please [click here to authorize]({url})")
     except requests.exceptions.JSONDecodeError:
         st.error("Something went wrong with the response")
-    
-if st.button("Get My 10 Recent Tracks"):
-    response = requests.get("http://127.0.0.1:8000/recent")
-    st.space(size="small")
+        
+month = st.selectbox(
+    label="Choose month",
+    options=available_months,
+    index=None,
+    placeholder="Select month",
+    label_visibility="collapsed",
+    width=190
+)
 
-    
-    if response.status_code == 200:
-        tracks = response.json()
-        top_10 = tracks[:10]
+if month:
+    if st.button(f"Get top 10 tracks of {month}"):
+        response = requests.get(f"http://127.0.0.1:8000/stats/{month}")
+        st.space(size="small")
 
-        for i in range(0, len(top_10), 5):
-            row_tracks = top_10[i : i + 5]
-            cols = st.columns(5) 
+        
+        if response.status_code == 200:
+            data = response.json()
+            top_songs = data['songs'][:10]
             
-            for j, track in enumerate(row_tracks):
-                with cols[j]:
-                    if track.get('image'):
-                        st.image(track['image'], use_container_width=True)
+            if not data:
+                st.warning("Not enough data for current month")
+                
+            st.subheader("Top 10 most played tracks")
+            
+            for i in range(0, len(top_songs), 5):
+                row_tracks = top_songs[i : i + 5]
+                cols = st.columns(5) 
+                
+                for j, track in enumerate(row_tracks):
+                    with cols[j]:
+                        if track.get('image'):
+                            st.image(track['image'],width='stretch')
+                        
+                        st.markdown(f" {j +1}. {track['song_name']} ")
+                        st.caption(f"{track['artist_name']}")
+                        
+            st.space(size="small")
+            st.subheader("Top 10 most played artists")
+            top_artist = data['artists'][:10]
+            
+            for i in range(0, len(top_artist), 5):
+                row_artist = top_artist[i : i +5]
+                cols = st.columns(5)
+                for j, artist in enumerate(row_artist):
+                    with cols[j]:
+                        # if artist.get('image')
+                            # st.image(track['image'],width='stretch')
+                        st.markdown(f" {j +1}. {artist['artist_name']} ")
                     
-                    st.markdown(f" {j +1}. {track['song_name']} ")
-                    st.caption(f"{track['artist']}")
-    else:
-        st.error("Something went wrong")
+            st.space(size="small")
+            top_time = max(data['time_of_day'], key=data['time_of_day'].get)
+            st.subheader(f"You mostly listen music during the {top_time}!")
+            
+        else:
+            st.error("Something went wrong")
+            
+            
