@@ -3,8 +3,8 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 from fastapi import APIRouter
 from fastapi.responses import RedirectResponse
-from data_processor import parse_recently_played_tracks, analyse_tracks
-from db import save_recentplays_to_db, fetch_from_db
+from data_processor import analyse_tracks, parse_artist_data
+from db import fetch_from_db
 
 router = APIRouter()
 
@@ -30,18 +30,13 @@ async def get_monthly_data(month:str):
     cached_token = sp_auth.cache_handler.get_cached_token()
     token = sp_auth.validate_token(cached_token)
     if not token: 
-        return {"error": "No valid token. Visit /login"}
+        return {"error": "Token is not valid"}
     sp = Spotify(auth=token['access_token'])
-    try:
-        top_artists = analysed_data['artists']
-        artist_ids = [a['artist_id'] for a in top_artists]
-        artist_data = sp.artists(artist_ids)
-    except Exception as e:
-        print(f"DEBUG: Spotify API Error: {e}")
-        return {"error": str(e)}
-    
-    #TO DO: PUT ARITST DATA INTO ANALYSED DATA AND RETURN TO FRONT END TO GET GENRES AND IMAGES!
-    #GITHUB ACTIONS
-    
-    return analysed_data
+    top_artists = analysed_data['artists']
+    artist_ids = [a['artist_id'] for a in top_artists]
+    artist_data = [sp.artist(a_id) for a_id in artist_ids]
+    if artist_data:
+        final_data = parse_artist_data(artist_data,analysed_data)
+
+    return final_data
  

@@ -38,7 +38,7 @@ if month:
         
         if response.status_code == 200:
             data = response.json()
-            top_songs = data['songs'][:10]
+            top_songs = data['songs']
             
             if not data:
                 st.warning("Not enough data for current month")
@@ -59,20 +59,24 @@ if month:
                         
             st.space(size="small")
             st.subheader("Top 10 most played artists")
-            top_artist = data['artists'][:10]
+            top_artist = data['artists']
             
             for i in range(0, len(top_artist), 5):
                 row_artist = top_artist[i : i +5]
                 cols = st.columns(5)
                 for j, artist in enumerate(row_artist):
                     with cols[j]:
-                        # if artist.get('image')
-                            # st.image(track['image'],width='stretch')
+                        if artist.get('image'):
+                            st.image(artist['image'],width='stretch')
                         st.markdown(f" {j +1}. {artist['artist_name']} ")
                     
             st.space(size="small")
             top_time = max(data['time_of_day'], key=data['time_of_day'].get)
             st.subheader(f"You mostly listen music during the {top_time}!")
+            
+            st.space(size="small")
+            top_time = max(data['time_of_day'], key=data['time_of_day'].get)
+            st.subheader(f"Your total listening time is XXXXX minutes")
             
         else:
             st.error("Something went wrong")
