@@ -27,17 +27,18 @@ async def get_monthly_data(month:str):
     data = fetch_from_db(month)
     analysed_data = analyse_tracks(data)
     
-    token = sp_auth.validate_token(sp_auth.cache_handler.get_cached_token())
-    # if not token: <--- needs a fix!!
-    #     return {"error": "No valid token. Visit /login"}
-    # sp = Spotify(auth=token['access_token'])
-    # try:
-    #     top_artists = analysed_data['artists']
-    #     artist_ids = [a['artist_id'] for a in top_artists]
-    #     artist_data = sp.artists(artist_ids)
-    # except Exception as e:
-    #     print(f"DEBUG: Spotify API Error: {e}")
-    #     return {"error": str(e)}
+    cached_token = sp_auth.cache_handler.get_cached_token()
+    token = sp_auth.validate_token(cached_token)
+    if not token: 
+        return {"error": "No valid token. Visit /login"}
+    sp = Spotify(auth=token['access_token'])
+    try:
+        top_artists = analysed_data['artists']
+        artist_ids = [a['artist_id'] for a in top_artists]
+        artist_data = sp.artists(artist_ids)
+    except Exception as e:
+        print(f"DEBUG: Spotify API Error: {e}")
+        return {"error": str(e)}
     
     #TO DO: PUT ARITST DATA INTO ANALYSED DATA AND RETURN TO FRONT END TO GET GENRES AND IMAGES!
     #GITHUB ACTIONS

@@ -10,5 +10,6 @@ sp_auth=SpotifyOAuth(
     client_id=os.getenv("SPOTIPY_CLIENT_ID"),
     client_secret=os.getenv("SPOTIPY_CLIENT_SECRET"),
     redirect_uri=os.getenv("SPOTIPY_REDIRECT_URI"),
-    scope="user-read-recently-played"
+    scope="user-read-recently-played",
+    open_browser=False
     )
