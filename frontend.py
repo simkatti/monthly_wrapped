@@ -54,7 +54,7 @@ if month:
                         if track.get('image'):
                             st.image(track['image'],width='stretch')
                         
-                        st.markdown(f" {j +1}. {track['song_name']} ")
+                        st.markdown(f" {i +j +1}. {track['song_name']} ")
                         st.caption(f"{track['artist_name']}")
                         
             st.space(size="small")
@@ -68,7 +68,7 @@ if month:
                     with cols[j]:
                         if artist.get('image'):
                             st.image(artist['image'],width='stretch')
-                        st.markdown(f" {j +1}. {artist['artist_name']} ")
+                        st.markdown(f" {i +j +1}. {artist['artist_name']} ")
                     
             st.space(size="small")
             top_time = max(data['time_of_day'], key=data['time_of_day'].get)

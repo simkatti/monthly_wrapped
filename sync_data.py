@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 from spotify_client import sp_auth
 from data_processor import parse_recently_played_tracks
 from db import save_recentplays_to_db

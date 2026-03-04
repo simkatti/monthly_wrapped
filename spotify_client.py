@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyOAuth
 
-
 load_dotenv()
 
 sp_auth=SpotifyOAuth(
