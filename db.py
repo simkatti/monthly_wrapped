@@ -42,17 +42,28 @@ def save_recentplays_to_db(songs):
         
             
 def fetch_from_db(month):
-    month_num = datetime.strptime(month, "%B").month
     connection = get_db_connection()
     cur = connection.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    query = """
+    if month == "all year":
+        year = datetime.now().year
+        query = """
             SELECT t.track_id, t.artist_id, t.song_name, t.artist_name, t.image, t.duration_ms, s.played_at
             FROM streams s
             JOIN tracks t ON s.track_id = t.track_id
-            WHERE EXTRACT(MONTH FROM s.played_at) = %s
+            WHERE EXTRACT(YEAR FROM s.played_at) = %s
             ORDER BY s.played_at ASC;
-    """
-    cur.execute(query, (month_num,))
+        """
+        cur.execute(query, (year,))
+    else:
+        month_num = datetime.strptime(month, "%B").month
+        query = """
+                SELECT t.track_id, t.artist_id, t.song_name, t.artist_name, t.image, t.duration_ms, s.played_at
+                FROM streams s
+                JOIN tracks t ON s.track_id = t.track_id
+                WHERE EXTRACT(MONTH FROM s.played_at) = %s
+                ORDER BY s.played_at ASC;
+        """
+        cur.execute(query, (month_num,))
     data = cur.fetchall()
     cur.close()
     connection.close()

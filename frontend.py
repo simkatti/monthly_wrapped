@@ -8,7 +8,7 @@ st.space(size="medium")
 
 current_month = datetime.datetime.now().month
 months = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
-available_months = months[:current_month]
+available_months = months[:current_month] + ("all year",)
 
 
 
@@ -33,9 +33,7 @@ month = st.selectbox(
 if month:
     if st.button(f"Get top 10 tracks of {month}"):
         response = requests.get(f"http://127.0.0.1:8000/stats/{month}")
-        st.space(size="small")
 
-        
         if response.status_code == 200:
             data = response.json()
             top_songs = data['songs']
@@ -43,6 +41,7 @@ if month:
             if not data:
                 st.warning("Not enough data for current month")
                 
+            st.space(size="small")
             st.subheader("Top 10 most played tracks")
             
             for i in range(0, len(top_songs), 5):
@@ -56,6 +55,7 @@ if month:
                         
                         st.markdown(f" {i +j +1}. {track['song_name']} ")
                         st.caption(f"{track['artist_name']}")
+                        st.caption(f"{track['count']} listens")
                         
             st.space(size="small")
             st.subheader("Top 10 most played artists")
@@ -69,16 +69,15 @@ if month:
                         if artist.get('image'):
                             st.image(artist['image'],width='stretch')
                         st.markdown(f" {i +j +1}. {artist['artist_name']} ")
+                        st.caption(f"{artist['count']} plays")
                     
             st.space(size="small")
-            top_time = max(data['time_of_day'], key=data['time_of_day'].get)
-            st.subheader(f"You mostly listen music during the {top_time}!")
+
+            st.subheader(f"You mostly listen during the {data['time_of_day']} between {data['time_slot']}!")
             
             st.space(size="small")
-            top_time = max(data['time_of_day'], key=data['time_of_day'].get)
-            st.subheader(f"Your total listening time is XXXXX minutes")
+            
+            st.subheader(f"Your total listening time in {month} is {data['total_minutes']} minutes which is {data['formatted_time']}")
             
         else:
             st.error("Something went wrong")
-            
-            

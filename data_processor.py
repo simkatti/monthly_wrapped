@@ -38,11 +38,12 @@ def analyse_tracks(data):
     stats = {
         "songs": {},
         "artists": {},
-        "time_of_day": {"morning": 0, "afternoon":0, "evening": 0, "night": 0}
+        "time_of_day": {"morning": 0, "afternoon":0, "evening": 0, "night": 0},
+        "time_slot": "",
+        "total_minutes": 0,
+        "formatted_time": ""
     }
-    for i in range(len(data)):
-        current_track = data[i]
-        
+    for current_track in data:
         track_id = current_track['track_id']
         artist_id = current_track['artist_id']
         artist_name = current_track['artist_name']
@@ -50,16 +51,19 @@ def analyse_tracks(data):
         duration = current_track['duration_ms']
         image = current_track['image']
     
+        #counting streams
         if track_id not in stats['songs']:
             stats['songs'][track_id] = {"song_name": song_name, "artist_name": artist_name, "image": image, "count": 1}
         else: 
             stats['songs'][track_id]['count'] += 1
-            
+        
+        #counting artist streams
         if artist_id not in stats['artists']:
             stats['artists'][artist_id] = {"artist_id": artist_id, "artist_name": artist_name, "count": 1}
         else:
             stats['artists'][artist_id]['count'] += 1
-            
+        
+        #counting played at times
         hour = current_track['played_at'].hour
         if 5 <= hour < 12:
             stats["time_of_day"]["morning"] += 1
@@ -69,10 +73,35 @@ def analyse_tracks(data):
             stats["time_of_day"]["evening"] += 1
         else:
             stats["time_of_day"]["night"] += 1
+        
+        #counting total played milliseconds of every track
+        stats['total_minutes'] += duration
+    
+    
+    top_time = max(stats['time_of_day'], key=stats['time_of_day'].get)
+    if top_time == "morning":
+        time_slot = "5 - 12"
+    if top_time == "afternoon":
+        time_slot = "12 - 17"
+    if top_time == "evening":
+        time_slot = "17 - 21"
+    if top_time == "night":
+        time_slot = "21 - 5"
+        
+        
+    ms = stats['total_minutes']
+    minutes = int(ms // (1000 * 60))
+    days = minutes // 1440
+    hours = (minutes % 1440) // 60
+    mins = minutes % 60
             
     stats["songs"] = sorted(stats["songs"].values(), key=lambda x: x['count'], reverse=True)[:10]
     stats["artists"] = sorted(stats["artists"].values(), key=lambda x: x['count'], reverse=True)[:10]
+    stats['time_of_day'] = top_time
+    stats['time_slot'] = time_slot
+    stats['total_minutes'] = minutes
+    stats['formatted_time'] = f"{days} days, {hours} hours and {mins} minutes."
     return stats
 
 # if __name__ == "__main__":
-# TO DO: CALCULATE HOW MANY MINUTES
+
