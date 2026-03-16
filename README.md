@@ -57,6 +57,13 @@ Streams table:
 | ---- | ---------- | --------- | 
 | int (pk) | text    |  timestamp    | 
 
+### Technologies:
+* Automation: Github workflow
+* Backend: poetry (dependency managament), python, psycopg2 (postgreSQL)
+* Frontend: streamlit
+* DB: Superbase
+* API: spotify web api
+
 
 ## Limitations:
 * spotify seems only to add the song to recently played tracks after the user has played the song and moved on to the next song. This means that if the user doesn't move to the next song and keeps replaying one song without it ever ending (e.g skipping to the start of the song before the song ends) the spotify API only adds it once. The replays are only added if user moves onto the next song and goes back to the previous song.
