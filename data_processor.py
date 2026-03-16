@@ -41,7 +41,10 @@ def analyse_tracks(data):
         "time_of_day": {"morning": 0, "afternoon":0, "evening": 0, "night": 0},
         "time_slot": "",
         "total_minutes": 0,
-        "formatted_time": ""
+        "formatted_time": "",
+        "total_artists": 0,
+        "total_songs": 0
+        
     }
     for current_track in data:
         track_id = current_track['track_id']
@@ -94,13 +97,16 @@ def analyse_tracks(data):
     days = minutes // 1440
     hours = (minutes % 1440) // 60
     mins = minutes % 60
-            
+    
+    stats['total_artists'] = len(stats['artists'])
+    stats['total_songs'] = len(stats['songs'])
     stats["songs"] = sorted(stats["songs"].values(), key=lambda x: x['count'], reverse=True)[:10]
     stats["artists"] = sorted(stats["artists"].values(), key=lambda x: x['count'], reverse=True)[:10]
     stats['time_of_day'] = top_time
     stats['time_slot'] = time_slot
     stats['total_minutes'] = minutes
     stats['formatted_time'] = f"{days} days, {hours} hours and {mins} minutes."
+    
     return stats
 
 # if __name__ == "__main__":

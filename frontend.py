@@ -79,5 +79,9 @@ if month:
             
             st.subheader(f"Your total listening time in {month} is {data['total_minutes']} minutes which is {data['formatted_time']}")
             
+            st.space(size="small")
+            
+            st.subheader(f"You listened {data['total_artists']} different artists and {data['total_songs']} different songs!")
+            
         else:
             st.error("Something went wrong")
