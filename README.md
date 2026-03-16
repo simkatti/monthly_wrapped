@@ -69,6 +69,10 @@ Streams table:
 * spotify seems only to add the song to recently played tracks after the user has played the song and moved on to the next song. This means that if the user doesn't move to the next song and keeps replaying one song without it ever ending (e.g skipping to the start of the song before the song ends) the spotify API only adds it once. The replays are only added if user moves onto the next song and goes back to the previous song.
 * The spotify API only has 50 recently played songs. If user plays more than 50 songs before the github workflow is run, those songs will not be recorded. Currently, the github workflow fetches songs from the API once a day in the evening.
 
+### Future improvements:
+* The app is still missing tests
+* Docker
+
 
 ## To run project (make sure you have poetry):
 install dependencies: 
