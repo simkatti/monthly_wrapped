@@ -1,4 +1,4 @@
-name: Sync sportify data
+name: Sync spotify data
 
 on:
   schedule:
