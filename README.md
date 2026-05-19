@@ -1,7 +1,8 @@
 [![Sync sportify data](https://github.com/simkatti/monthly_wrapped/actions/workflows/sync.yml/badge.svg)](https://github.com/simkatti/monthly_wrapped/actions/workflows/sync.yml)
+![Docker Image Version (tag)](https://img.shields.io/docker/v/simkatti/monthly-wrapped/latest)
 
 # Monthly wrapped (under construction)
-Personal data engineering project that uses spotifys APIs to analyse listening stream. 
+Personal project that uses spotifys APIs to analyse listening stream. **Note:** A Spotify Premium account is required to access the Web API's.
 The application works in a following way:
 
 The app fetches 50 recently played tracks every night from spotify API by using automated github workflow and puts them to database. The database is hosted by Superbase and has two tables: tracks and streams. Tracks hold information about every unique song played while streams records every track and the time the track was played. 
@@ -63,6 +64,7 @@ Streams table:
 * Frontend: streamlit
 * DB: Superbase
 * API: spotify web api
+* Docker
 
 
 ## Limitations:
@@ -71,13 +73,15 @@ Streams table:
 
 ### Future improvements:
 * The app is still missing tests
-* Docker
-
 
 ## To run project (make sure you have poetry):
-install dependencies: 
+* install dependencies with poetry: 
 `poetry install `
 
-run project: `poetry run poe dev`, this command runs frontend and backend. If you prefer to run frontend and backend separately:
+* Create an .env file and add spotipy, spotify and the database secrets
+
+* run project:
+`poetry run poe dev`, this command runs frontend and backend. If you prefer to run frontend and backend separately:
 `uvicorn main:app --reload` and `poetry run streamlit run frontend.py`
 
+* or head to [DockerHub](https://hub.docker.com/repository/docker/simkatti/monthly-wrapped/general)
