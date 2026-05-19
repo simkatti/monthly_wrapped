@@ -1,5 +1,5 @@
 [![Sync sportify data](https://github.com/simkatti/monthly_wrapped/actions/workflows/sync.yml/badge.svg)](https://github.com/simkatti/monthly_wrapped/actions/workflows/sync.yml)
-![Docker Image Version (tag)](https://img.shields.io/docker/v/simkatti/monthly-wrapped/latest)
+[![Docker Image Version (tag)](https://img.shields.io/docker/v/simkatti/monthly-wrapped/latest)](https://hub.docker.com/repository/docker/simkatti/monthly-wrapped/)
 
 # Monthly wrapped (under construction)
 Personal project that uses spotifys APIs to analyse listening stream. **Note:** A Spotify Premium account is required to access the Web API's.
